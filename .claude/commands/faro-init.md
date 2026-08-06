@@ -1,63 +1,97 @@
 ---
-description: Initialise Faro in this repository and create the canonical store.
-argument-hint: "[project name]"
+description: Initialize the minimal Faro project store in this repository.
+argument-hint: [project-name]
+allowed-tools: Bash(node .claude/faro/faro.mjs:*), Read
 ---
 
 # /faro-init
 
-Create the canonical `.faro/` store, and stop there. This command builds the skeleton — the
-store, the charter file, the generated views — and nothing else. Filling the charter in is
-`/faro-charter`, and landing the first requirements is `/faro-adopt` or `/faro-intake`.
+Initialize Faro in the current repository so a Project Charter can be
+established afterwards.
 
-The split is deliberate. Everything downstream hangs off the charter, so authoring it is a
-deliberate act with the user in the room, not a side effect of setting up a directory.
+Requested project name (may be empty): $ARGUMENTS
 
-## Procedure
+## What this command does
 
-1. **Check for an existing project.** Run `node .claude/faro/tools/faro.mjs inspect`. If a
-   store already exists, stop and report it. Never pass `--force` on your own initiative —
-   replacing a store discards the project's direction, and that is the user's call.
+1. Locates the repository root and refuses to write anything outside it.
+2. Creates the minimal store:
 
-2. **Initialise.** Run:
-
-   ```bash
-   node .claude/faro/tools/faro.mjs init --name "$ARGUMENTS"
+   ```text
+   .faro/
+     project.json
+     charter/
+       history/
    ```
 
-   Omit `--name` if no name was given; Faro derives one from `package.json` or the
-   directory. This writes `project.json`, a draft `charter/charter.md`, and the generated
-   views, and validates them before reporting success.
+3. Writes project metadata with Charter status `missing`.
+4. Tells the user to run `/faro-charter`.
 
-3. **Notice what the repository already carries.** A `README`, `docs/`, an architecture
-   document, a brief, a roadmap. **Name them and stop** — do not read them for direction and
-   do not draft anything from them. Listing what exists tells the user which command comes
-   next; reading it here would author the charter behind their back.
+It is idempotent and never overwrites an existing Faro project.
 
-4. **Validate.**
+## What this command does not do
 
-   ```bash
-   node .claude/faro/tools/faro.mjs inspect
-   ```
+- It does **not** create a Charter, a Charter draft, or a placeholder Charter
+  file. `.faro/charter/current.md` stays absent until the first Charter is
+  confirmed through `/faro-charter`.
+- It does **not** scan the repository, its source code, or its Git history.
+  Only a clear existing manifest may supply a project name.
+- It does **not** create records, registries, or scaffolding for anything else.
 
-   It reports the charter as a draft. That is correct at this point, not a problem to fix.
+## Steps
 
-5. **Report, and route the user to the right next command.** Show what was created, name the
-   requirement-like documents you found, and recommend one of:
+**1. Run the toolkit.**
 
-   | What the user has | Next command |
-   |---|---|
-   | direction in their head, or a vision or brief document | `/faro-charter` |
-   | a brief or existing documents holding several requirements | `/faro-adopt` |
-   | an existing repository with code and work in flight | `/faro-adopt` |
-   | one single idea to capture | `/faro-intake` |
+With a name argument:
 
-   The charter stays `draft` and `/faro-inspect` keeps saying so until somebody fills it in.
-   Say that plainly rather than leaving it as a warning the user has to interpret.
+```bash
+node .claude/faro/faro.mjs init "<project-name>"
+```
 
-## Boundary
+Without one (the toolkit derives a sensible name from a clear manifest or the
+directory name):
 
-`/faro-init` creates the store and nothing else. It does not author the charter — that is
-`/faro-charter` — and it does not create requirements, decisions, knowledge, or baselines,
-which arrive through `/faro-intake` or `/faro-adopt` and are admitted by `/faro-apply`. It
-never reads a requirement-like document for content, never passes `--force` on its own
-initiative, and never promotes a charter to `active`.
+```bash
+node .claude/faro/faro.mjs init
+```
+
+**2. Read the JSON result.** It reports `created`, `already_initialized`,
+`project`, and `charter`.
+
+**3. Report concisely.**
+
+First initialization:
+
+```markdown
+## Faro initialized
+
+**Project**
+<project_name>
+
+**Charter**
+Not established
+
+**Next step**
+Run `/faro-charter` with a product brief, raw requirements, notes, or other project materials.
+```
+
+Already initialized (`already_initialized: true`) - report the current state and
+change nothing:
+
+```markdown
+## Faro already initialized
+
+**Project**
+<project_name>
+
+**Charter**
+Not established        (or: Active, version <n>)
+
+**Next step**
+Run `/faro-charter` to establish the Product North Star.
+```
+
+When the Charter is already active, say so and offer `/faro-charter` for adding
+context or revising direction.
+
+**4. On error**, show the `error.message` from the JSON and stop. Do not create
+files by hand and do not repair the store manually.
