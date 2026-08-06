@@ -78,7 +78,7 @@ at apply time so they cannot be forged or collide.
 
 A `bug` or a `work_unit` produces an **obligation** draft, not a requirement. An obligation
 records accepted work that is not a requirement: it can be routed with `/faro-route` and worked
-with `/faro-work`, and it stays open until somebody closes it with `faro close`. Never invent a
+with `/faro-work`, and it stays open until somebody closes it with `/faro-close`. Never invent a
 requirement to give a defect somewhere to live.
 
 Every proposal changes something. There is no "recorded and closed" outcome: if the input

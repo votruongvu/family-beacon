@@ -41,7 +41,7 @@ export function rebaseProposal(store, id) {
   }
   if (!exists(store, relative)) {
     throw new FaroError('PROPOSAL_NOT_FOUND', `${id} does not exist.`, {
-      hint: 'Run `faro inspect` to list open proposals.',
+      hint: 'Run `/faro-inspect` to list open proposals.',
       path: `.faro/${relative}`,
     });
   }
@@ -56,7 +56,7 @@ export function rebaseProposal(store, id) {
   const freshness = proposalFreshness(store, original.data);
   if (freshness.fresh) {
     throw new FaroError('PROPOSAL_NOT_STALE', `${id} is still bound to current project state; there is nothing to rebase.`, {
-      hint: `Apply it with \`faro apply ${id}\`, or capture a new intake if the idea itself has changed.`,
+      hint: `Apply it with \`/faro-apply ${id}\`, or capture a new intake if the idea itself has changed.`,
       path: `.faro/${relative}`,
     });
   }

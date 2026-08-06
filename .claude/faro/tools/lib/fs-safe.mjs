@@ -68,7 +68,7 @@ export function readUtf8(file) {
   } catch (err) {
     if (err && err.code === 'ENOENT') {
       throw new FaroError('FILE_MISSING', `Expected file is missing: ${file}`, {
-        hint: 'Run `faro init` to create a project, or restore the file from version control.',
+        hint: 'Run `/faro-init` to create a project, or restore the file from version control.',
         path: file,
       });
     }
@@ -160,7 +160,7 @@ export function commitStore(projectRoot, staging, force) {
   if (exists && !force) {
     fs.rmSync(staging, { recursive: true, force: true });
     throw new FaroError('STORE_EXISTS', `${STORE_DIR}/ already exists in ${projectRoot}.`, {
-      hint: 'Re-run with --force to replace the existing store, or run `faro inspect` to review it.',
+      hint: 'Re-run with --force to replace the existing store, or run `/faro-inspect` to review it.',
       path: target,
     });
   }

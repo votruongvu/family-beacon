@@ -42,7 +42,7 @@ Answer "can this route be handed to execution, and what exactly does it authoris
    |---|---|---|
    | `ROUTE_STALE` | a bound project file or repository file changed | `/faro-route-rebase <id>` |
    | `ROUTE_REBASE_PENDING` | carried forward but not reconsidered | `/faro-route-rebase <id>` |
-   | `ROUTE_APPROVAL_PENDING` | policy requires a named human | `faro route-approve <id> --by "Name"` |
+   | `ROUTE_APPROVAL_PENDING` | policy requires a named human | `/faro-approve <id>` |
    | `ROUTE_APPROVAL_UNDERSTATED` | the facts require approval the route did not claim | fix the route; it cannot be used as written |
    | `ROUTE_INVALID` | facts contradict the contract's own scopes | fix the named field |
 

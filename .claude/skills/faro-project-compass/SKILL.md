@@ -9,7 +9,7 @@ The charter is Faro's North Star: the direction that stays true while requiremen
 knowledge, decisions, and code churn beneath it. It is canonical, hand-authored, and small.
 
 `.faro/views/PROJECT_COMPASS.md` is a **generated projection** of it. Never edit the view —
-edit `.faro/charter/charter.md` and run `faro render`.
+edit `.faro/charter/charter.md`, then regenerate the views with `faro render`.
 
 ## What belongs in it
 

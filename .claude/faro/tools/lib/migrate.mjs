@@ -48,7 +48,7 @@ export function migrateStore(store, options = {}) {
   const from = project.schemaVersion ?? 1;
   if (from === SCHEMA_VERSION) {
     throw new FaroError('MIGRATION_NOT_NEEDED', `This project is already at schema v${SCHEMA_VERSION}.`, {
-      hint: 'Run `faro inspect` to check its health.',
+      hint: 'Run `/faro-inspect` to check its health.',
     });
   }
   if (from > SCHEMA_VERSION) {

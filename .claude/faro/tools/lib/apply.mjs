@@ -57,7 +57,7 @@ export function approveProposal(store, id, by) {
   const proposal = readOpenProposal(store, id, relative);
   if (!by || by.trim() === '') {
     throw new FaroError('APPROVER_REQUIRED', 'Approval must name the person granting it.', {
-      hint: `Run: faro approve ${id} --by "Your Name"`,
+      hint: `Run: /faro-approve ${id} --by "Your Name"`,
     });
   }
   const data = ordered('proposal', {
@@ -81,7 +81,7 @@ export function rejectProposal(store, id, reason) {
   const proposal = readOpenProposal(store, id, relative);
   if (!reason || reason.trim() === '') {
     throw new FaroError('REASON_REQUIRED', 'Rejecting a proposal must record why.', {
-      hint: `Run: faro reject ${id} --reason "why this is not admitted"`,
+      hint: `Run: /faro-reject ${id} --reason "why this is not admitted"`,
     });
   }
   const data = ordered('proposal', {
@@ -107,7 +107,7 @@ export function applyProposal(store, id) {
   const freshness = proposalFreshness(store, data);
   if (!freshness.fresh) {
     throw new FaroError('PROPOSAL_STALE', `${id} was reasoned from project state that has since changed.`, {
-      hint: `${freshness.changed.join('; ')}. Run \`faro rebase ${id}\` to reconsider it against the current project.`,
+      hint: `${freshness.changed.join('; ')}. Run \`/faro-rebase ${id}\` to reconsider it against the current project.`,
       path: `.faro/${relative}`,
     });
   }
@@ -130,7 +130,7 @@ export function applyProposal(store, id) {
   const policy = requiredApproval(data);
   if (policy.level === 'human' && data.approval?.granted !== true) {
     throw new FaroError('APPROVAL_REQUIRED', `${id} needs explicit human approval before it can be applied.`, {
-      hint: `${policy.reasons.join('; ')}. Run: faro approve ${id} --by "Your Name"`,
+      hint: `${policy.reasons.join('; ')}. Run: /faro-approve ${id} --by "Your Name"`,
       path: `.faro/${relative}`,
     });
   }
@@ -408,7 +408,7 @@ export function readOpenProposal(store, id, relative) {
   }
   if (!exists(store, relative)) {
     throw new FaroError('PROPOSAL_NOT_FOUND', `${id} does not exist.`, {
-      hint: 'Run `faro inspect` to list open proposals.',
+      hint: 'Run `/faro-inspect` to list open proposals.',
       path: `.faro/${relative}`,
     });
   }

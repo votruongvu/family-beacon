@@ -1,18 +1,36 @@
 ---
-description: Map an existing repository into a reviewable set of ordinary Faro proposals, and stop before approval.
-argument-hint: "[optional source paths — README.md docs/architecture.md docs/roadmap.md]"
+description: Map existing material — a requirements brief, design documents, or a whole repository — into a reviewable set of ordinary Faro proposals, and stop before approval.
+argument-hint: "[source paths — docs/PRD.md README.md — or the brief itself, pasted inline]"
 ---
 
 # /faro-adopt
 
-Bring Faro into a project that already has code, documents, and work in flight.
+Turn a body of existing material into project truth. That material is usually a repository with
+code, documents, and work in flight — but it does not have to be. A brand-new project whose only
+input is a requirements brief goes through exactly this command, and so does a brief the user
+types straight into the conversation.
+
+Use it whenever there is **more than one item** to land. One idea at a time is `/faro-intake`; a
+ten-page brief through `/faro-intake` is thirty sequential classifications of the same document.
 
 **You produce proposals. You never approve them and never apply them.** Adoption ends with a set
 of ordinary intake records and proposals a human still has to read — the same artifacts
 `/faro-intake` produces, through the same mechanisms.
 
-Arguments: `$ARGUMENTS` — optional paths the user considers authoritative. When given, treat them as
-tier-2 sources and still explain your selection; when absent, discover candidates yourself.
+Arguments: `$ARGUMENTS` — either paths the user considers authoritative, or the brief itself in
+plain language.
+
+- **Paths** are tier-2 sources. Treat them as authoritative and still explain your selection.
+- **Inline prose** is a tier-1 source — an explicit user statement, the strongest evidence of
+  intent there is. Capture the user's words verbatim into the intake record before decomposing
+  them, exactly as `/faro-intake` does, so what they actually said survives your paraphrase.
+- **Neither** means discover candidates yourself.
+
+A project with no code is not a reason to refuse. Tiers 3 to 5 — manifests, working tree, git
+history — are simply absent, and everything the brief states is intended direction rather than
+implementation evidence. That makes adoption *easier*, not inapplicable: the hardest judgement in
+this command is separating what code does from what a project agreed to, and a greenfield brief
+has none of it.
 
 ## Before you start
 
@@ -78,12 +96,12 @@ End with the report below and nothing after it. Then stop — no `approve`, no `
 activation without the user saying so in as many words.
 
 ```markdown
-## Existing project mapped
+## Existing material mapped
 
 **What Faro understood**
 - <Current project purpose or direction>
 - <Important active delivery or boundary>
-- <Important implementation fact>
+- <Important implementation fact, when there is an implementation>
 
 **Proposed project truth**
 - <Number and summary of Requirements>
@@ -106,8 +124,8 @@ activation without the user saying so in as many words.
 ADOPTION PROPOSALS READY
 
 **Next step**
-Review the proposals, approve the ones that are correct, then run `/faro-apply` for each in the
-recommended order.
+Review the proposals, approve the ones that are correct with `/faro-approve PROP-NNNN`, then run
+`/faro-apply PROP-NNNN` for each in the recommended order.
 ```
 
 Omit any section with nothing in it. Keep hashes, schema fields, and validation output out of it —

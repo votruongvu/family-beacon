@@ -67,7 +67,7 @@ export function readWorkableRoute(store, id, options = {}) {
   }
   const relative = `routes/${id}.md`;
   if (!exists(store, relative)) {
-    throw new FaroError('ROUTE_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `faro inspect` to list routes.' });
+    throw new FaroError('ROUTE_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `/faro-inspect` to list routes.' });
   }
   const route = readItem(store, relative, 'route');
   if (route.issues.length > 0) {
@@ -121,7 +121,7 @@ export function readWorkableRoute(store, id, options = {}) {
   const freshness = workingFreshness(store, data);
   if (options.requireFresh !== false && freshness.moved.length > 0) {
     throw new FaroError('ROUTE_STALE', `${id} is bound to project or repository state that has changed outside its write scope.`, {
-      hint: `${freshness.moved.map((entry) => entry.message).join('; ')}. Run \`faro route-rebase ${id}\` and reconsider it before working from it.`,
+      hint: `${freshness.moved.map((entry) => entry.message).join('; ')}. Run \`/faro-route-rebase ${id}\` and reconsider it before working from it.`,
       path: `.faro/${relative}`,
     });
   }

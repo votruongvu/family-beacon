@@ -48,7 +48,7 @@ export function resolveRoutingSource(store, reference) {
     const relative = `requirements/${id}/v${version}.md`;
     if (!exists(store, relative)) {
       throw new FaroError('SOURCE_NOT_FOUND', `${reference} does not exist.`, {
-        hint: 'Run `faro inspect` to see which requirement versions are admitted.',
+        hint: 'Run `/faro-inspect` to see which requirement versions are admitted.',
         path: `.faro/${relative}`,
       });
     }
@@ -75,7 +75,7 @@ export function resolveRoutingSource(store, reference) {
     const relative = `obligations/${reference}.md`;
     if (!exists(store, relative)) {
       throw new FaroError('SOURCE_NOT_FOUND', `${reference} does not exist.`, {
-        hint: 'Run `faro inspect` to see accepted obligations.',
+        hint: 'Run `/faro-inspect` to see accepted obligations.',
         path: `.faro/${relative}`,
       });
     }
@@ -253,7 +253,7 @@ export function approveRoute(store, id, by) {
   const freshness = routingFreshness(store, route.data);
   if (!freshness.fresh) {
     throw new FaroError('ROUTE_STALE', `${id} is bound to project or repository state that has changed.`, {
-      hint: `${freshness.changed.join('; ')}. Run \`faro route-rebase ${id}\` before approving it.`,
+      hint: `${freshness.changed.join('; ')}. Run \`/faro-route-rebase ${id}\` before approving it.`,
     });
   }
   // A rebased route carries the original's conclusions forward. Approving one
@@ -311,7 +311,7 @@ export function rejectRoute(store, id, reason) {
 export function rebaseRoute(store, id) {
   const relative = `routes/${id}.md`;
   if (!exists(store, relative)) {
-    throw new FaroError('ROUTE_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `faro inspect` to list routes.' });
+    throw new FaroError('ROUTE_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `/faro-inspect` to list routes.' });
   }
   const original = readItem(store, relative, 'route');
   if (!['draft', 'review_required', 'approved'].includes(original.data.status)) {
@@ -443,7 +443,7 @@ function readOpenRoute(store, id) {
     throw new FaroError('INVALID_ID', `"${id}" is not a route id.`, { hint: 'Route ids look like ROUTE-0001.' });
   }
   if (!exists(store, relative)) {
-    throw new FaroError('ROUTE_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `faro inspect` to list routes.' });
+    throw new FaroError('ROUTE_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `/faro-inspect` to list routes.' });
   }
   const route = readItem(store, relative, 'route');
   if (route.issues.length > 0) {

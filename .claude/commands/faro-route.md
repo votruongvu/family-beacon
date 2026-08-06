@@ -110,11 +110,8 @@ Report to the user:
 - ambiguities and stop conditions
 - whether human approval is required, and what triggered it
 
-If approval is required, give the user the command and never run it yourself:
-
-```bash
-node .claude/faro/tools/faro.mjs route-approve ROUTE-NNNN --by "Their Name"
-```
+If approval is required, say what triggered it and point the user at `/faro-approve ROUTE-NNNN`.
+Never grant it yourself — a route that approves the scope it just chose for itself is not gated.
 
 ## Boundary
 

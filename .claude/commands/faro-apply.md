@@ -26,14 +26,11 @@ changes only what the proposal declared.
      `/faro-rebase $ARGUMENTS` — it carries the original idea forward for reconsideration
      without making the user retype it. There is no force flag, by design.
    - **Missing approval.** Policy requires a named human. Tell the user what triggered it
-     and give them the command:
+     and stop, so they can run `/faro-approve $ARGUMENTS` themselves.
 
-     ```bash
-     node .claude/faro/tools/faro.mjs approve $ARGUMENTS --by "Their Name"
-     ```
-
-     Never run `approve` on the user's behalf, and never with your own name. The whole
-     value of the gate is that a person's name is on it.
+     Never grant the approval from inside this command, and never with your own name. The
+     whole value of the gate is that a person's name is on it, so approving on the user's
+     behalf — even after they asked you to apply — empties it.
 
 4. **Apply.**
 
@@ -47,26 +44,22 @@ changes only what the proposal declared.
    exposed. Then it commits the changed files together and advances `storeRevision`.
 
    A failure at any point leaves the project exactly as it was. If the process dies mid-commit,
-   `faro inspect` reports the unfinished transaction and `faro recover` rolls it back.
+   the inspector reports the unfinished transaction and `faro recover` rolls it back.
 
-5. **Verify and report.** Run `faro inspect` again. Report the ids that were admitted, the
+5. **Verify and report.** Run the inspector again. Report the ids that were admitted, the
    files written, and — worth stating explicitly — the files that were **not** touched. If
    any other open proposal went stale because this apply changed a file it was bound to,
    name it and point at `/faro-rebase`.
 
    If the proposal admitted an **obligation** (a `bug` or a `work_unit`), say plainly that the
    work is accepted but not fulfilled: route it with `/faro-route OBL-NNNN` and work it with
-   `/faro-work`, and `faro inspect` will keep reporting it until it is closed with
-   `faro close OBL-NNNN --status fulfilled --reason "..."`.
+   `/faro-work`. Faro keeps reporting it until the user closes it with
+   `/faro-close OBL-NNNN --status fulfilled --reason "..."`.
 
 ## Rejecting instead
 
-If the classification is wrong or the idea is not admitted, close it with the reason on
-the record rather than deleting it:
-
-```bash
-node .claude/faro/tools/faro.mjs reject $ARGUMENTS --reason "why this is not admitted"
-```
+If the classification is wrong or the idea is not admitted, the user closes it with the
+reason on the record rather than deleting it: `/faro-reject $ARGUMENTS --reason "why"`.
 
 Rejected intake stays traceable. It never silently disappears.
 

@@ -1,13 +1,19 @@
 ---
 name: faro-existing-project-adoption
-description: Map an existing repository into Faro's current project truth — choosing a bounded source set, separating intended direction from implementation evidence, drafting only what is still active, and reporting every conflict as an ambiguity rather than resolving it. Use during /faro-adopt, when a project already has code, documents, and work in flight.
+description: Map existing material — a requirements brief, design documents, or a whole repository — into Faro's current project truth, choosing a bounded source set, separating intended direction from implementation evidence, drafting only what is still active, and reporting every conflict as an ambiguity rather than resolving it. Use during /faro-adopt, whether the project already has code and work in flight or is a greenfield brief.
 ---
 
-# Adopting an existing project
+# Adopting existing material
 
 The job is a **trustworthy current-state starting point**, not a reconstruction of how the
 project got here. Enough truth to classify and route the next work item safely, and nothing
 invented to fill a gap.
+
+The material is usually a repository. It does not have to be: a new project whose only input is a
+requirements brief — a file, or the user's own words in the conversation — takes the same path.
+When there is no code, tiers 3 to 5 below are simply absent and everything the brief states is
+intended direction. That removes the hardest judgement in this skill rather than making it
+inapplicable.
 
 Classification, delta impact, charter authorship, and draft shape are not restated here — use
 `faro-intake-classification`, `faro-delta-impact`, `faro-project-compass`, and
@@ -21,11 +27,15 @@ how a project ends up with requirements nobody agreed to.
 
 | Tier | Source | Establishes |
 |---|---|---|
-| 1 | explicit user statements | intended direction — the strongest evidence of intent |
-| 2 | active accepted documents — overview, current architecture, roadmap, live ADRs | intended project truth |
+| 1 | explicit user statements, including a brief given in conversation | intended direction — the strongest evidence of intent |
+| 2 | active accepted documents — brief, overview, current architecture, roadmap, live ADRs | intended project truth |
 | 3 | repository metadata — manifests, workspace layout, config examples | implementation *shape*, never intent |
 | 4 | the current working tree | implementation truth |
 | 5 | git history | historical evidence only |
+
+A greenfield brief is tier 1 or tier 2 and nothing else. Capture the user's own wording verbatim
+into the intake record before you decompose it — a paraphrase is already a classification, and
+once the original words are gone nobody can tell which parts you supplied.
 
 **Tier 4 is the one that goes wrong.** Code is what the project *does*, never what it has
 *agreed to*. A behaviour found only in code may be intentional, accidental, legacy, incomplete, or

@@ -82,19 +82,14 @@ The toolkit cross-checks the facts against the mutation set and refuses contradi
 no accepted behaviour changed, `active_baseline_affected: true` naming a baseline that is not
 active. That is what stops a proposal from declaring its way to a lower gate.
 
-Approval itself is a person's name and a timestamp:
-
-```bash
-node .claude/faro/tools/faro.mjs approve PROP-0007 --by "Their Name"
-```
-
-Never grant it on the user's behalf.
+Approval itself is a person's name and a timestamp. The user grants it with
+`/faro-approve PROP-0007`. Never grant it on their behalf.
 
 ## What apply refuses
 
 **A stale proposal.** A canonical file in `context_bindings` changed since the proposal was
 written. There is no override, because the classification was reached against project state
-that no longer exists. Run `faro rebase PROP-NNNN` — see the `/faro-rebase` command.
+that no longer exists. The user carries it forward with `/faro-rebase PROP-NNNN`.
 
 **An un-reconsidered rebase.** A rebased proposal carries the original's assertions forward as
 a starting point. Until `rebase.reconsidered` is true, it cannot be applied.
@@ -111,11 +106,11 @@ obligations/OBL-0001.md   kind: bug   status: unrouted
 
 An obligation records accepted work that is not a requirement. It is routable — `/faro-route
 OBL-0001` compiles it and `/faro-work` implements it — but closing the proposal without a record
-would make the project read as finished when it is not. `faro inspect` keeps reporting every open
-obligation, and only an explicit close ends it:
+would make the project read as finished when it is not. Faro keeps reporting every open
+obligation, and only an explicit close by the user ends it:
 
-```bash
-node .claude/faro/tools/faro.mjs close OBL-0001 --status fulfilled --reason "fixed in the ingestion worker"
+```text
+/faro-close OBL-0001 --status fulfilled --reason "fixed in the ingestion worker"
 ```
 
 Never invent a requirement to give a defect somewhere to live. A defect means the requirement

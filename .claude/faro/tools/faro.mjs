@@ -176,8 +176,8 @@ function cmdInit(cwd, flags) {
   const lines = [`Initialised Faro project "${result.name}" (${result.projectId})`, ''];
   for (const file of result.created) lines.push(`  created  ${file}`);
   lines.push('');
-  lines.push('The Project Charter is a draft — fill in .faro/charter/charter.md, then run `faro render`.');
-  lines.push('Next: capture your first idea with /faro-intake, or check state with `faro inspect`.');
+  lines.push('The Project Charter is an empty draft. Author it with /faro-charter.');
+  lines.push('Then: /faro-adopt to land a brief or an existing repository, /faro-intake for a single idea.');
   process.stdout.write(`${lines.join('\n')}\n`);
   return 0;
 }
@@ -281,7 +281,7 @@ function cmdBind(cwd, positional) {
 
 function cmdApprove(cwd, positional, flags) {
   const result = approveProposal(openStore(cwd), positional[0], flags.by === undefined ? '' : String(flags.by));
-  process.stdout.write(`${result.id} approved by ${result.approvedBy}. Run \`faro apply ${result.id}\` to admit it.\n`);
+  process.stdout.write(`${result.id} approved by ${result.approvedBy}. Run \`/faro-apply ${result.id}\` to admit it.\n`);
   return 0;
 }
 
@@ -331,13 +331,13 @@ function cmdClose(cwd, positional, flags) {
   const reason = flags.reason === undefined ? '' : String(flags.reason);
   if (!/^OBL-\d{4}$/.test(id ?? '') || !['fulfilled', 'withdrawn'].includes(status) || reason.trim() === '') {
     throw new FaroError('USAGE', 'close needs an obligation id, a terminal status, and a reason.', {
-      hint: `Example: faro close OBL-0001 --status fulfilled --reason "fixed in the ingestion worker". Statuses: ${OBLIGATION_STATUS.filter((s) => s !== 'unrouted').join(', ')}.`,
+      hint: `Example: /faro-close OBL-0001 --status fulfilled --reason "fixed in the ingestion worker". Statuses: ${OBLIGATION_STATUS.filter((s) => s !== 'unrouted').join(', ')}.`,
     });
   }
   const store = openStore(cwd);
   const relative = `obligations/${id}.md`;
   if (!exists(store, relative)) {
-    throw new FaroError('OBLIGATION_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `faro inspect` to list open obligations.' });
+    throw new FaroError('OBLIGATION_NOT_FOUND', `${id} does not exist.`, { hint: 'Run `/faro-inspect` to list open obligations.' });
   }
   const obligation = readItem(store, relative, 'obligation');
   if (obligation.data.status !== 'unrouted') {

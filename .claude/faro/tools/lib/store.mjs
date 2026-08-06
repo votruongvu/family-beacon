@@ -50,7 +50,7 @@ export function openStore(startDir) {
   const root = findProjectRoot(startDir);
   if (!root) {
     throw new FaroError('NO_PROJECT', `No Faro project found in ${path.resolve(startDir)} or any parent directory.`, {
-      hint: 'Run `faro init` in your repository root to create one.',
+      hint: 'Run `/faro-init` in your repository root to create one.',
     });
   }
   return { root, dir: path.join(root, STORE_DIR) };

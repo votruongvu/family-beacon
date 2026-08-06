@@ -1,13 +1,16 @@
 ---
-description: Initialise Faro in this repository and draft its Project Charter.
+description: Initialise Faro in this repository and create the canonical store.
 argument-hint: "[project name]"
 ---
 
 # /faro-init
 
-Create the canonical `.faro/` store and get the Project Charter to a state a human can
-agree with. Everything after this — every requirement, decision, and admission — hangs off
-the charter, so a charter nobody read is worse than an empty one.
+Create the canonical `.faro/` store, and stop there. This command builds the skeleton — the
+store, the charter file, the generated views — and nothing else. Filling the charter in is
+`/faro-charter`, and landing the first requirements is `/faro-adopt` or `/faro-intake`.
+
+The split is deliberate. Everything downstream hangs off the charter, so authoring it is a
+deliberate act with the user in the room, not a side effect of setting up a directory.
 
 ## Procedure
 
@@ -25,36 +28,36 @@ the charter, so a charter nobody read is worse than an empty one.
    directory. This writes `project.json`, a draft `charter/charter.md`, and the generated
    views, and validates them before reporting success.
 
-3. **Gather charter evidence from the repository.** Read what already exists — `README`,
-   `docs/`, an architecture document, the package manifest, recent commit subjects. You are
-   looking for stated direction, not inferring it: vision, the problem, deliverable units,
-   milestones, explicit non-goals, and who decides things.
+3. **Notice what the repository already carries.** A `README`, `docs/`, an architecture
+   document, a brief, a roadmap. **Name them and stop** — do not read them for direction and
+   do not draft anything from them. Listing what exists tells the user which command comes
+   next; reading it here would author the charter behind their back.
 
-4. **Draft the charter.** Edit `.faro/charter/charter.md` directly. Fill the front matter
-   with stable ids (`OBJ-01`, `DEL-01`, `MS-01`, `PRN-01`, `SM-01`, `STK-01`) and write the
-   `## Vision` and `## Problem` narrative in the body. Follow the **faro-project-compass**
-   skill for what belongs in a charter and — more importantly — what does not.
-
-   Mark anything you could not ground in repository evidence. An objective you invented is
-   worse than an objective the user has to add: it reads as agreed direction and then
-   quietly misroutes every later classification.
-
-   Leave `status: draft` unless the user explicitly confirms the charter is right. Only the
-   user promotes it to `active`.
-
-5. **Regenerate and validate.**
+4. **Validate.**
 
    ```bash
-   node .claude/faro/tools/faro.mjs render
    node .claude/faro/tools/faro.mjs inspect
    ```
 
-6. **Report.** Show the charter you drafted, name each element you could not ground in
-   evidence, and point at the next step: `/faro-intake` for the first idea.
+   It reports the charter as a draft. That is correct at this point, not a problem to fix.
+
+5. **Report, and route the user to the right next command.** Show what was created, name the
+   requirement-like documents you found, and recommend one of:
+
+   | What the user has | Next command |
+   |---|---|
+   | direction in their head, or a vision or brief document | `/faro-charter` |
+   | a brief or existing documents holding several requirements | `/faro-adopt` |
+   | an existing repository with code and work in flight | `/faro-adopt` |
+   | one single idea to capture | `/faro-intake` |
+
+   The charter stays `draft` and `/faro-inspect` keeps saying so until somebody fills it in.
+   Say that plainly rather than leaving it as a warning the user has to interpret.
 
 ## Boundary
 
-`/faro-init` establishes direction. It does not create requirements, decisions, knowledge,
-or baselines — those arrive through `/faro-intake` and are admitted by `/faro-apply`. If
-the repository already carries requirement-like documents, mention them and stop; importing
-them is a separate act the user should ask for deliberately.
+`/faro-init` creates the store and nothing else. It does not author the charter — that is
+`/faro-charter` — and it does not create requirements, decisions, knowledge, or baselines,
+which arrive through `/faro-intake` or `/faro-adopt` and are admitted by `/faro-apply`. It
+never reads a requirement-like document for content, never passes `--force` on its own
+initiative, and never promotes a charter to `active`.

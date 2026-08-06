@@ -44,7 +44,7 @@ export function initProject(options) {
   const root = path.resolve(options.cwd);
   if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
     throw new FaroError('NO_TARGET_DIRECTORY', `${root} is not a directory.`, {
-      hint: 'Run `faro init` from inside the repository you want to manage.',
+      hint: 'Run `/faro-init` from inside the repository you want to manage.',
     });
   }
   const name = (options.name ?? deriveName(root)).trim();
@@ -152,9 +152,10 @@ function draftCharter(name) {
     '',
     '## How to fill this in',
     '',
-    'Add objectives, deliveries, milestones, scope, principles, success measures, and',
-    'stakeholders to the front matter above using stable ids (`OBJ-01`, `DEL-01`, `MS-01`,',
-    '`PRN-01`, `SM-01`, `STK-01`), then run `faro render` to refresh the generated views.',
+    'Run `/faro-charter` to fill this in from a brief or a conversation, or write it yourself:',
+    'objectives, deliveries, milestones, scope, principles, success measures, and stakeholders',
+    'in the front matter above, using stable ids (`OBJ-01`, `DEL-01`, `MS-01`, `PRN-01`,',
+    '`SM-01`, `STK-01`). Faro regenerates the views from this file — never edit them directly.',
     'Delete this section once the charter is real.',
   ].join('\n');
   return writeDocument(data, body);

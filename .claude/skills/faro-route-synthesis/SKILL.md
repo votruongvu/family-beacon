@@ -105,13 +105,8 @@ contradictions — `cross_repository_write` must match the write scope, `unresol
 must match the ambiguities list, `external_credentials_required` must match the credential
 scope, and an `expanded_beyond_hypothesis` recorded in the investigation must be asserted here.
 
-Any fact true, or confidence below `high`, requires a named human:
-
-```bash
-node .claude/faro/tools/faro.mjs route-approve ROUTE-0001 --by "Their Name"
-```
-
-Never grant it yourself.
+Any fact true, or confidence below `high`, requires a named human. The user grants it with
+`/faro-approve ROUTE-0001`. Never grant it yourself.
 
 ## What a route is not
 

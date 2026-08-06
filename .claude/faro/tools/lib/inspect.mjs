@@ -389,7 +389,7 @@ function buildReport(store) {
       error('MISSING_LINEAGE', `.faro/${relative}`, 'a superseded route must name the successor that replaced it');
     }
     if (open && !freshness.fresh) {
-      warn('ROUTE_STALE', `.faro/${relative}`, `${freshness.changed[0]} — run \`faro route-rebase ${id}\``);
+      warn('ROUTE_STALE', `.faro/${relative}`, `${freshness.changed[0]} — run \`/faro-route-rebase ${id}\``);
     }
     if (open && provisional) {
       warn('ROUTE_REBASE_PENDING', `.faro/${relative}`, `rebased from ${read.data.rebase.routed_from}; the route has not been reconsidered yet`);
@@ -574,7 +574,7 @@ function checkProposal(store, read, relative, lookups, report) {
   if (proposal.status === 'draft' || proposal.status === 'approved') {
     const freshness = proposalFreshness(store, proposal);
     if (!freshness.fresh) {
-      warn('PROPOSAL_STALE', `.faro/${relative}`, `${freshness.changed[0]} — run \`faro rebase ${proposal.id}\``);
+      warn('PROPOSAL_STALE', `.faro/${relative}`, `${freshness.changed[0]} — run \`/faro-rebase ${proposal.id}\``);
     }
     if (proposal.rebase && proposal.rebase.reconsidered !== true) {
       warn('REBASE_PENDING', `.faro/${relative}`, `rebased from ${proposal.rebase.rebased_from}; classification has not been reconsidered yet`);
