@@ -14,6 +14,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    buildFeatures {
+        // The flavors below set the application name through resValue, which is
+        // off by default from Android Gradle Plugin 9 onwards.
+        resValues = true
+    }
+
     defaultConfig {
         applicationId = "com.familybeacon.app"
         minSdk = flutter.minSdkVersion
@@ -28,6 +34,29 @@ android {
             // introduced with the distribution workflow. Until then the debug
             // keys are used so `flutter run --release` works locally.
             signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+
+    // The three environments are separate installable applications. Distinct
+    // identifiers let all three sit on one device at once, so environment
+    // isolation is something you can see rather than something you trust, and a
+    // staging build can never quietly replace a production one.
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("development") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "Family Beacon Dev")
+        }
+        create("staging") {
+            dimension = "environment"
+            applicationIdSuffix = ".stg"
+            resValue("string", "app_name", "Family Beacon Staging")
+        }
+        create("production") {
+            dimension = "environment"
+            resValue("string", "app_name", "Family Beacon")
         }
     }
 }

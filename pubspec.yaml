@@ -13,6 +13,15 @@ dependencies:
   # Identifier hashing for diagnostics. Pure Dart, so the shared core can use it
   # without breaking its own isolation rule.
   crypto: ^3.0.6
+  # Backend clients. These are initialized in lib/app and used from feature data
+  # layers; the architecture check keeps them out of every domain layer.
+  cloud_firestore: ^6.0.3
+  cloud_functions: ^6.0.3
+  firebase_app_check: ^0.4.0
+  firebase_auth: ^6.1.0
+  firebase_core: ^4.1.1
+  firebase_crashlytics: ^5.0.3
+  firebase_messaging: ^16.0.3
   flutter:
     sdk: flutter
 

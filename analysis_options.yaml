@@ -28,6 +28,11 @@ analyzer:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
     - "**/generated_plugin_registrant.dart"
+    # Build output. Swift Package Manager checks dependency sources out under
+    # build/ios/SourcePackages, and analysing other people's packages produces
+    # thousands of findings nobody in this project can act on.
+    - "build/**"
+    - ".dart_tool/**"
 
 linter:
   rules:

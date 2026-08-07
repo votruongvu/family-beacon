@@ -110,6 +110,14 @@ coverage/
 # Symbols
 app.*.symbols
 
+# Backend client configuration, generated per environment by
+# `flutterfire configure`. These files carry no secret — they identify a
+# project, they do not authorize access to it — but they are generated rather
+# than authored, and there is one per environment. Each developer generates the
+# set they need; see the setup documentation.
+**/google-services.json
+**/GoogleService-Info.plist
+
 # Editor and OS noise
 .DS_Store
 .idea/
