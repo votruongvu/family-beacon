@@ -1,6 +1,7 @@
 import 'package:family_beacon/app/app.dart';
 import 'package:family_beacon/app/bootstrap.dart';
 import 'package:family_beacon/app/di/app_providers.dart';
+import 'package:family_beacon/shared/di/shared_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

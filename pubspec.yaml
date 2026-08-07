@@ -30,9 +30,15 @@ dependencies:
   # Declarative routing. The route table is defined in one place, in the
   # application layer, and never becomes the authority on access.
   go_router: ^17.0.0
+  # The initial device-location adapter. Reached only through the
+  # LocationSource contract in the shared core, so replacing it is a change
+  # in one file in the application layer.
+  geolocator: ^14.0.0
 
 dev_dependencies:
   flutter_lints: ^6.0.0
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   # Pure Dart tests run on the standalone runner, so the domain suite can be

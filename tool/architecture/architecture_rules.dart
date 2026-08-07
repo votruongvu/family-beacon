@@ -79,6 +79,7 @@ final class Zone {
       feature: feature,
       layer: layerIndex == -1 ? null : segments[layerIndex],
       isCore: path.startsWith('lib/core/'),
+      isShared: path.startsWith('lib/shared/'),
       isApp: path.startsWith('lib/app/'),
     );
   }
@@ -88,6 +89,7 @@ final class Zone {
     required this.feature,
     required this.layer,
     required this.isCore,
+    required this.isShared,
     required this.isApp,
   });
 
@@ -102,6 +104,13 @@ final class Zone {
 
   /// Whether it is part of the shared core.
   final bool isCore;
+
+  /// Whether it is part of the shared, framework-aware layer.
+  ///
+  /// This layer exists so a feature can resolve a common dependency — the
+  /// clock, the logger — without importing the application that composes it.
+  /// It knows the framework, and it knows no feature.
+  final bool isShared;
 
   /// Whether it is part of the application wiring layer.
   final bool isApp;
@@ -191,11 +200,25 @@ final class ArchitectureCheck {
       // reported under the rule that explains it best. A core file reaching
       // into a feature is a core-independence problem; saying only that it left
       // a pure zone would be true but much less useful.
-      if (zone.isCore && (targetZone.feature != null || targetZone.isApp)) {
+      if (zone.isCore &&
+          (targetZone.feature != null ||
+              targetZone.isApp ||
+              targetZone.isShared)) {
         report(
           'core_independence',
-          'The shared core may not import `$target`. The core is depended on by '
-              'features, never the reverse.',
+          'The shared core may not import `$target`. The core is the lowest '
+              'layer: shared code, features, and the application all depend on '
+              'it, and it depends on none of them.',
+        );
+        continue;
+      }
+
+      if (zone.isShared && (targetZone.feature != null || targetZone.isApp)) {
+        report(
+          'shared_independence',
+          'The shared layer may not import `$target`. It exists so a feature can '
+              'resolve a common dependency without importing the application '
+              'that composes it, which only works while it knows neither.',
         );
         continue;
       }

@@ -5,6 +5,7 @@ import 'package:family_beacon/app/di/app_providers.dart';
 import 'package:family_beacon/app/router/app_routes.dart';
 import 'package:family_beacon/app/router/route_guard.dart';
 import 'package:family_beacon/app/shell/placeholder_page.dart';
+import 'package:family_beacon/features/diagnostics/presentation/pages/diagnostics_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,6 +28,10 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ref) {
           title: 'Welcome',
           message: 'Signing in arrives with the authentication Requirement.',
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.diagnostics,
+        builder: (context, state) => const DiagnosticsPage(),
       ),
       GoRoute(
         path: AppRoutes.home,

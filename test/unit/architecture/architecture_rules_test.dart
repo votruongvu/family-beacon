@@ -186,6 +186,70 @@ const example = "import 'package:geolocator/geolocator.dart';";
     });
   });
 
+  group('the shared layer', () {
+    test('may be imported by a feature, which is why it exists', () {
+      expect(
+        checkFile(
+          'lib/features/sos/presentation/providers/sos_providers.dart',
+          "import 'package:family_beacon/shared/di/shared_providers.dart';",
+        ),
+        isEmpty,
+        reason:
+            'a feature must be able to resolve the clock without importing lib/app',
+      );
+    });
+
+    test('may not import a feature', () {
+      final violations = checkFile(
+        'lib/shared/di/shared_providers.dart',
+        "import 'package:family_beacon/features/sos/domain/entities/sos_event.dart';",
+      );
+
+      expect(violations, hasLength(1));
+      expect(violations.single.rule, 'shared_independence');
+    });
+
+    test('may not import the application layer', () {
+      final violations = checkFile(
+        'lib/shared/di/shared_providers.dart',
+        "import 'package:family_beacon/app/di/app_providers.dart';",
+      );
+
+      expect(violations, hasLength(1));
+      expect(violations.single.rule, 'shared_independence');
+    });
+
+    test('may use the framework, unlike the core', () {
+      expect(
+        checkFile(
+          'lib/shared/di/shared_providers.dart',
+          "import 'package:flutter_riverpod/flutter_riverpod.dart';",
+        ),
+        isEmpty,
+      );
+    });
+
+    test('may be built on the core', () {
+      expect(
+        checkFile(
+          'lib/shared/di/shared_providers.dart',
+          "import 'package:family_beacon/core/time/clock.dart';",
+        ),
+        isEmpty,
+      );
+    });
+
+    test('is below the core, which may not reach up into it', () {
+      final violations = checkFile(
+        'lib/core/time/clock.dart',
+        "import 'package:family_beacon/shared/di/shared_providers.dart';",
+      );
+
+      expect(violations, hasLength(1));
+      expect(violations.single.rule, 'core_independence');
+    });
+  });
+
   group('cross-feature data coupling', () {
     test('rejects one feature importing another feature data layer', () {
       final violations = checkFile(

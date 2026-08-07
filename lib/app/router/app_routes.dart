@@ -18,6 +18,13 @@ abstract final class AppRoutes {
   /// A placeholder destination, replaced as product capabilities arrive.
   static const String home = '/';
 
+  /// The Foundation's proof slice, showing a request reaching the backend and
+  /// coming back.
+  ///
+  /// Not a product destination. It is guarded like any other, because the round
+  /// trip it runs is scoped to whoever is signed in.
+  static const String diagnostics = '/diagnostics';
+
   /// The destinations reachable without being signed in.
   ///
   /// Everything not listed here is guarded.

@@ -33,6 +33,16 @@ service cloud.firestore {
     // implemented. Each arrives with rules tests that prove both the access it
     // intends to allow and the access it must refuse.
 
+    // The Foundation's proof slice. Not a product capability: it exists so the
+    // baseline can demonstrate a request reaching the datastore and coming back.
+    //
+    // Scoped as narrowly as anything here ever should be. The document is named
+    // after its owner, so "may I touch this?" and "is this mine?" are the same
+    // question, and there is no path by which one person reaches another's.
+    match /diagnostics/{userId} {
+      allow read, write: if isSelf(userId);
+    }
+
     // --- Default deny ------------------------------------------------------
     //
     // Every path not matched above lands here. This is deliberately the last

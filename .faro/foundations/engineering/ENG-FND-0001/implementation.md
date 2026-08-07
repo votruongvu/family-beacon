@@ -217,5 +217,5 @@ FS-001, FS-002, FS-003, FS-004, FS-005, FS-006
 - FS-003 — Completed
 - FS-004 — Completed
 - FS-005 — Completed
-- FS-006 — Pending
+- FS-006 — Completed
 - FS-007 — Pending

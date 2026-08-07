@@ -16,6 +16,7 @@ import { after, before, describe, it } from 'node:test';
 
 import {
   assertFails,
+  assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing';
 
@@ -134,6 +135,54 @@ describe('the family boundary', () => {
         status: 'RESPONDING',
       }),
     );
+  });
+});
+
+describe('the diagnostics probe', () => {
+  it('lets someone write their own', async () => {
+    const db = testEnvironment.authenticatedContext('user-1').firestore();
+
+    await assertSucceeds(
+      setDoc(doc(db, 'diagnostics/user-1'), { recordedAt: new Date(), note: 'probe' }),
+    );
+  });
+
+  it('lets someone read their own back', async () => {
+    const db = testEnvironment.authenticatedContext('user-1').firestore();
+    await assertSucceeds(
+      setDoc(doc(db, 'diagnostics/user-1'), { recordedAt: new Date(), note: 'probe' }),
+    );
+
+    await assertSucceeds(getDoc(doc(db, 'diagnostics/user-1')));
+  });
+
+  it('refuses reading somebody else', async () => {
+    const db = testEnvironment.authenticatedContext('user-2').firestore();
+
+    await assertFails(getDoc(doc(db, 'diagnostics/user-1')));
+  });
+
+  it('refuses writing to somebody else', async () => {
+    const db = testEnvironment.authenticatedContext('user-2').firestore();
+
+    await assertFails(
+      setDoc(doc(db, 'diagnostics/user-1'), { recordedAt: new Date(), note: 'not mine' }),
+    );
+  });
+
+  it('refuses an anonymous caller entirely', async () => {
+    const db = testEnvironment.unauthenticatedContext().firestore();
+
+    await assertFails(getDoc(doc(db, 'diagnostics/user-1')));
+    await assertFails(
+      setDoc(doc(db, 'diagnostics/user-1'), { recordedAt: new Date(), note: 'probe' }),
+    );
+  });
+
+  it('refuses listing the collection, which would enumerate everyone', async () => {
+    const db = testEnvironment.authenticatedContext('user-1').firestore();
+
+    await assertFails(getDocs(collection(db, 'diagnostics')));
   });
 });
 

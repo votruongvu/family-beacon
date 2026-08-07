@@ -12,7 +12,12 @@ library;
 /// those live with the feature that owns them. `base` keeps the hierarchy
 /// closed to `implements`, so every failure really is a [Failure], while
 /// staying open to `extends` from another library.
-abstract base class Failure {
+///
+/// It implements `Exception` so that the few places which genuinely have to
+/// throw — a provider turning a failed load into an error state the interface
+/// renders — can do so without inventing a wrapper. That is the exception, not
+/// the rule: failures are returned in a `Result` almost everywhere.
+abstract base class Failure implements Exception {
   /// Creates a failure.
   const Failure({required this.code, this.debugMessage, this.cause});
 
