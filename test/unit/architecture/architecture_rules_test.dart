@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
-import '../../tool/architecture/architecture_rules.dart';
+import '../../../tool/architecture/architecture_rules.dart';
 
 void main() {
   const check = ArchitectureCheck();

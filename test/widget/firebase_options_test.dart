@@ -41,13 +41,34 @@ void main() {
       // Client configuration is public by design — it identifies the project,
       // it does not authorize access to it. What must never appear here is a
       // server key or a service-account credential, and those are recognisable.
-      expect(
-        options.apiKey,
-        isNot(startsWith('AIza')),
-        reason: 'placeholder, not a real key',
-      );
       expect(options.asMap.keys, isNot(contains('privateKey')));
       expect(options.asMap.keys, isNot(contains('clientEmail')));
+    }
+  });
+
+  test('the placeholder keys are shaped the way the platform demands', () {
+    // The iOS SDK validates the shape of the key before it makes any request:
+    // 39 characters, starting with `A`. A placeholder that ignores this makes
+    // the application crash on launch rather than fail on first use, which is
+    // how this was found.
+    for (final environment in AppEnvironment.values) {
+      final apiKey = firebaseOptionsFor(environment).apiKey;
+
+      expect(
+        apiKey,
+        hasLength(39),
+        reason: 'the platform rejects any other length',
+      );
+      expect(
+        apiKey,
+        startsWith('A'),
+        reason: 'the platform rejects any other prefix',
+      );
+      expect(
+        apiKey,
+        contains('Placeholder'),
+        reason: 'these must stay obviously fake until real projects exist',
+      );
     }
   });
 }
