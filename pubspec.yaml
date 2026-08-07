@@ -10,6 +10,9 @@ environment:
   sdk: ^3.12.2
 
 dependencies:
+  # Identifier hashing for diagnostics. Pure Dart, so the shared core can use it
+  # without breaking its own isolation rule.
+  crypto: ^3.0.6
   flutter:
     sdk: flutter
 
@@ -17,6 +20,9 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
+  # Pure Dart tests run on the standalone runner, so the domain suite can be
+  # proven to need no Flutter binding.
+  test: ^1.25.0
 
 flutter:
   uses-material-design: true

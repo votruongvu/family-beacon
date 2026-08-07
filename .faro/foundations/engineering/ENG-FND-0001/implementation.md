@@ -213,7 +213,7 @@ FS-001, FS-002, FS-003, FS-004, FS-005, FS-006
 ## Current Progress
 
 - FS-001 — Completed
-- FS-002 — Pending
+- FS-002 — Completed
 - FS-003 — Pending
 - FS-004 — Pending
 - FS-005 — Pending

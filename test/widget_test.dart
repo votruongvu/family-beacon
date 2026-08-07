@@ -1,4 +1,4 @@
-import 'package:family_beacon/main.dart';
+import 'package:family_beacon/app/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
