@@ -1,0 +1,22 @@
+{
+  "name": "family-beacon-backend-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend tooling and security-rules tests for Family Beacon. The mobile application is a Flutter project at the repository root; this manifest exists only so the Firebase command line tool and the rules test harness are pinned to a version rather than depending on what happens to be installed on a machine.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "emulators": "firebase emulators:start --only auth,firestore,functions",
+    "test:rules": "firebase emulators:exec --only firestore --project family-beacon-test \"node --test 'test/rules/**/*.test.mjs'\"",
+    "test:functions": "npm --prefix functions test",
+    "test:callables": "npm --prefix functions run build && firebase emulators:exec --only auth,functions --project family-beacon-test \"node --test 'test/functions/**/*.test.mjs'\"",
+    "typecheck:functions": "npm --prefix functions run typecheck"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "firebase": "^12.17.1",
+    "firebase-tools": "^14.0.0"
+  }
+}

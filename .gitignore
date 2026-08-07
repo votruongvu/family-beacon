@@ -110,6 +110,13 @@ coverage/
 # Symbols
 app.*.symbols
 
+# Backend tooling and build output
+node_modules/
+functions/lib/
+functions/.build-test/
+.firebase/
+firebase-export-*/
+
 # Backend client configuration, generated per environment by
 # `flutterfire configure`. These files carry no secret — they identify a
 # project, they do not authorize access to it — but they are generated rather

@@ -1,0 +1,24 @@
+{
+  "name": "family-beacon-functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Trusted backend code for Family Beacon. Operations with elevated trust or cross-user effect run here, never on the client.",
+  "main": "lib/index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "test": "tsc -p tsconfig.test.json && node --test \".build-test/test/**/*.test.js\"",
+    "serve": "npm run build && firebase emulators:start --only functions"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
