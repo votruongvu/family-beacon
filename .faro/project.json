@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "project_id": "faro_70c3eb73f587ad38",
+  "project_name": "family-beacon",
+  "initialized_at": "2026-08-07T01:01:14.715Z",
+  "charter": {
+    "status": "active",
+    "current_version": 1,
+    "current_file": ".faro/charter/current.md",
+    "current_sha256": "1004208261d288fba0e71a353cd0b8606ac341f3cab386906e81b52980100340"
+  },
+  "requirements": {
+    "count": 0,
+    "last_id": null
+  },
+  "foundations": {
+    "engineering": {
+      "count": 1,
+      "last_id": "ENG-FND-0001"
+    },
+    "ux": {
+      "count": 0,
+      "last_id": null
+    }
+  }
+}

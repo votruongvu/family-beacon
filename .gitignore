@@ -118,6 +118,8 @@ app.*.symbols
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 
-# Claude 
+# Claude tooling (local only)
 .claude
-.faro
+
+# The Faro store (.faro) is tracked on purpose: the Charter, Foundations,
+# implementation records, and completion reports are project history.
