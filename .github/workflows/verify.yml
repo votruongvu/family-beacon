@@ -1,0 +1,103 @@
+name: Verify
+
+# The architectural and security boundaries of ENG-FND-0001 are only real if
+# something refuses to merge work that breaks them. This is that something.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  application:
+    name: Application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          # Pinned rather than "stable": a toolchain that changes under the
+          # project turns an unrelated pull request red for reasons nobody in
+          # the diff caused.
+          flutter-version: 3.44.8
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --set-exit-if-changed lib test tool integration_test
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Check architecture boundaries
+        run: dart run tool/check_architecture.dart
+
+      - name: Domain and unit tests
+        run: dart test test/unit
+
+      - name: Flutter tests
+        run: flutter test
+
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Matches the Cloud Functions runtime.
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          # The Firestore emulator needs a JVM.
+          distribution: temurin
+          java-version: 21
+
+      - name: Install tooling
+        run: npm ci
+
+      - name: Install backend dependencies
+        run: npm ci --prefix functions
+
+      - name: Typecheck
+        run: npm --prefix functions run typecheck
+
+      - name: Backend tests
+        run: npm --prefix functions test
+
+      - name: Security rules tests
+        run: npm run test:rules
+
+      - name: Callable tests
+        run: npm run test:callables
+
+  secrets:
+    name: No committed secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan for credentials
+        run: |
+          # A narrow scan for the shapes that are always wrong here: private
+          # keys, service-account files, and OAuth tokens. Client configuration
+          # identifies a project and is public by design, so it is not matched.
+          if git grep -nIE 'BEGIN [A-Z ]*PRIVATE KEY|"private_key"|"type": *"service_account"|ya29\.[0-9A-Za-z_-]{20,}' -- . ':(exclude)*.lock' ':(exclude)*package-lock.json'; then
+            echo "::error::A credential-shaped string is committed."
+            exit 1
+          fi
+          echo "No credential-shaped strings found."
